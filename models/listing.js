@@ -31,6 +31,7 @@ const listingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
+    //sadam
 }, { timestamps: true })
 
 const Listing = mongoose.model('Listing', listingSchema)
