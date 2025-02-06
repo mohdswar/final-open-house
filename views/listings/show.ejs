@@ -1,23 +1,47 @@
 <%- include('../partials/head') %>
-    <div class="container">
-        <div class="card mt-2" style="width: 80vw;">
-            <img src="<%= listing.imgUrl %>" class="card-img-top" alt="listing for <%= listing.streetAddress %>">
+    <div class="container mt-4">
+        <div class="card mx-auto shadow-lg" style="max-width: 800px;">
+            <img src="<%= listing.imgUrl %>" class="card-img-top" alt="Listing for <%= listing.streetAddress %>"
+                style="max-height: 400px; object-fit: cover;">
             <div class="card-body">
-                <h5 class="card-title">$<%= listing.price %></h5>
-                <p class="card-text"><%= listing.streetAddress %>, <%= listing.city %></p>
-                <p class="card-text"><%= listing.size %> m/sq</p>
-                <p class="text-muted">Listed by: <%= listing.owner.username || 'Unknown' %></p>
-                <div class="d-flex justify-content-start gap-2">
-                <a href="/listings" class="btn btn-primary">Back to Listings</a>
-                <!-- <a href="/listings/<%= listing._id %>?_method=DELETE" class="btn btn-danger">Delete</a> -->
-                 <% if (listing.owner._id.equals(user._id)) { %>
-                    <form action="/listings/<%= user._id %>/<%= listing._id %>?_method=DELETE" method="POST">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                    <a href="/listings/<%= user._id %>/<%= listing._id %>/edit">Edit this Listing</a>
-                 <% } %>
+                <h4 class="card-title text-primary fw-bold">$<%= listing.price %>
+                </h4>
+                <p class="card-text"><strong>
+                        <%= listing.streetAddress %>, <%= listing.city %>
+                    </strong></p>
+                <p class="card-text">Size: <%= listing.size %> m²</p>
+                <p class="text-muted">Listed by: <%= listing.owner.username || 'Unknown' %>
+                </p>
+
+                <div class="d-flex gap-2 mb-3">
+                    <a href="/listings" class="btn btn-outline-primary">Back to Listings</a>
+                    <% if (listing.owner._id.equals(user._id)) { %>
+                        <form action="/listings/<%= user._id %>/<%= listing._id %>?_method=DELETE" method="POST"
+                            class="d-inline">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <a href="/listings/<%= user._id %>/<%= listing._id %>/edit" class="btn btn-warning">Edit</a>
+                        <% } %>
+                </div>
+
+                <div class="border-top pt-3">
+                    <h5 class="fw-bold">Favorites</h5>
+                    <p class="card-text">Favorited by <strong>
+                            <%= listing.favoritedByUsers.length %>
+                        </strong> users</p>
+                    <% if (userHasFavorited) { %>
+                        <p class="text-muted">You've favorited this listing!</p>
+                        <form action="/listings/<%= listing._id %>/favorited-by/<%= user._id %>?_method=DELETE"
+                            method="POST">
+                            <button type="submit" class="btn btn-outline-info">Unfavorite</button>
+                        </form>
+                        <% } else { %>
+                            <form action="/listings/<%= listing._id %>/favorited-by/<%= user._id %>" method="POST">
+                                <button type="submit" class="btn btn-info">Favorite</button>
+                            </form>
+                            <% } %>
                 </div>
             </div>
         </div>
     </div>
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>
